@@ -1,3 +1,5 @@
+![AI Order Banner](banner.png)
+
 # ☕ AI Order Recommendation Service
 
 This is a Spring Boot side project that turns **natural language input into structured order recommendations**, powered by OpenAI and Kafka.
