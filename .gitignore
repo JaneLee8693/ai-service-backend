@@ -1,3 +1,13 @@
-.ai-kafka-env/
-.env
+# IntelliJ
 .idea/
+*.iml
+
+# Build output
+target/
+
+# macOS
+.DS_Store
+
+# local dev-only
+.ai-kafka-env/
+docker-compose*.yml
