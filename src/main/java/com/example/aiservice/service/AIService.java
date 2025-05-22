@@ -23,13 +23,15 @@ public class AIService {
 
     public Map<String, Object> getRecommendations(String userInput) {
         try {
-            String prompt = "使用者輸入了一段文字：「" + userInput + "」。請根據此語意推薦最多三個訂單項目，" +
-                    "每項包含：item（商品名稱）、quantity（數量）、notes（簡短備註），並以 JSON 陣列格式輸出。";
+            String prompt = "The user provided the following input: \"" + userInput + "\". " +
+                    "Based on the user's intent, recommend up to three order items. " +
+                    "Each item should include: item (product name), quantity (number), and notes (short description). " +
+                    "Respond in a pure JSON array format. Do not include Markdown or explanation.";
 
             String requestBodyJson = objectMapper.writeValueAsString(Map.of(
                 "model", "gpt-3.5-turbo",
                 "messages", List.of(
-                    Map.of("role", "system", "content", "你是一個語意推薦助手"),
+                    Map.of("role", "system", "content", "You are an AI assistant for product recommendation."),
                     Map.of("role", "user", "content", prompt)
                 )
             ));
@@ -45,7 +47,10 @@ public class AIService {
 
             try (Response response = client.newCall(request).execute()) {
                 if (!response.isSuccessful()) {
-                    return Map.of("error", "OpenAI API 回應錯誤: " + response.code());
+                    return Map.of(
+                            "status", "error",
+                            "message", "OpenAI API returned error: " + response.code()
+                    );
                 }
                 JsonNode root = objectMapper.readTree(response.body().string());
                 String content = root.path("choices").get(0).path("message").path("content").asText();
@@ -54,10 +59,16 @@ public class AIService {
                 JsonNode recommendations = objectMapper.readTree(content);
                 // Send recommendations to Kafka
                 kafkaProducerService.sendMessage(recommendations.toString());
-                return Map.of("recommendations", recommendations);
+                return Map.of(
+                        "status", "success",
+                        "data", recommendations
+                );
             }
         } catch (IOException e) {
-            return Map.of("error", "解析失敗: " + e.getMessage());
+            return Map.of(
+                    "status", "error",
+                    "message", "Parsing failed: " + e.getMessage()
+            );
         }
     }
 }
