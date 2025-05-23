@@ -1,0 +1,41 @@
+package com.example.aiservice.kafka;
+
+import com.example.aiservice.model.RecommendationItem;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
+import org.springframework.data.mongodb.core.MongoTemplate;
+
+import java.util.List;
+
+@Service
+public class KafkaConsumerService {
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @KafkaListener(topics = "recommendations", groupId = "recommendation-consumer-group")
+    public void consume(ConsumerRecord<String, String> record) {
+        try {
+            String json = record.value();
+
+            List<RecommendationItem> items = objectMapper.readValue(
+                    json, new TypeReference<>() {}
+            );
+
+            for (RecommendationItem item : items) {
+                mongoTemplate.save(item);
+            }
+
+            System.out.println("✅ Saved to MongoDB: " + items.size() + " items");
+
+        } catch (Exception e) {
+            System.err.println("❌ MongoDB Save Failed: " + e.getMessage());
+        }
+    }
+}
