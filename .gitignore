@@ -11,3 +11,4 @@ target/
 # local dev-only
 .ai-kafka-env/
 docker-compose*.yml
+prometheus.yml

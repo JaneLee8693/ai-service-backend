@@ -55,21 +55,16 @@ This project is designed for learning and building skills in:
 docker compose up -d
 ```
 
-### 2. Start MongoDB
-```bash
-docker compose -f docker-compose.mongodb.yml up -d
-```
-
-### 3. Set OpenAI API Key
+### 2. Set OpenAI API Key
 In your environment:
 ```bash
 export OPENAI_API_KEY=xxxxxxxxxxx
 ```
 
-### 4. Run
+### 3. Run
 Run AiServiceApplication.java
 
-### 5. API Testing
+### 4. API Testing
 ```bash
 POST http://localhost:8081/api/ai/recommend
 Content-Type: application/json
