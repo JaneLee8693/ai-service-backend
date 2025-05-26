@@ -8,11 +8,12 @@ import com.example.aiservice.service.OrderQueryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @Tag(name = "Order History", description = "View previously saved recommended orders")
 @RestController
 @RequestMapping("/api/orders")
+@CrossOrigin(origins = "*")
 public class OrderController {
 
     @Autowired
@@ -26,5 +27,20 @@ public class OrderController {
     @GetMapping
     public List<RecommendationItem> getOrders() {
         return orderQueryService.getAllOrders();
+    }
+
+    @GetMapping("/grouped")
+    public Map<String, List<RecommendationItem>> getGrouped() {
+        return orderQueryService.getOrdersGroupedByPrompt();
+    }
+
+    @DeleteMapping("/grouped/{prompt}")
+    public void deleteGroup(@PathVariable String prompt) {
+        orderQueryService.deleteByPrompt(prompt);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteSingle(@PathVariable String id) {
+        orderQueryService.deleteById(id);
     }
 }

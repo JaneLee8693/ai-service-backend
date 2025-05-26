@@ -5,13 +5,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import com.example.aiservice.service.AIService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.server.ResponseStatusException;
 
 @Tag(name = "AI Recommendations", description = "Generate order recommendations from natural language")
 @RestController
 @RequestMapping("/api/ai")
+@CrossOrigin(origins = "*")
 public class AIController {
 
     @Autowired
@@ -28,6 +31,10 @@ public class AIController {
     })
     @PostMapping("/recommend")
     public Map<String, Object> recommend(@RequestBody Map<String, String> input) {
-        return aiService.getRecommendations(input.get("text"));
+        String prompt = input.get("text");
+        if (prompt == null || prompt.trim().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Prompt is required");
+        }
+        return aiService.getRecommendations(prompt);
     }
 }
