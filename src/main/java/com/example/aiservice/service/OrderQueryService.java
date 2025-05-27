@@ -14,13 +14,16 @@ public class OrderQueryService {
     @Autowired
     private RecommendationItemRepository repository;
 
-    public List<RecommendationItem> getAllOrders(String username) {
+    public List<RecommendationItem> getAllOrders() {
+        return repository.findAll();
+    }
+
+    public List<RecommendationItem> getOrdersByUsername(String username) {
         return repository.findAllByUsername(username);
     }
 
-    public Map<String, List<RecommendationItem>> getGroupedByPrompt(String username) {
-        List<RecommendationItem> list = repository.findAllByUsername(username);
-        return list.stream()
+    public Map<String, List<RecommendationItem>> getGroupedByPromptAndUser(String username) {
+        return repository.findAllByUsername(username).stream()
                 .filter(item -> item.getPrompt() != null)
                 .collect(Collectors.groupingBy(RecommendationItem::getPrompt));
     }

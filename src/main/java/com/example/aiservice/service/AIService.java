@@ -27,9 +27,9 @@ public class AIService {
         try {
             // Craft the prompt to send to OpenAI
             String fullPrompt = "The user provided the following input: \"" + prompt + "\". " +
-                    "Based on the user's intent, recommend up to three order items. " +
+                    "Based only on food and drink items, recommend up to three order items. " +
                     "Each item should include: item (product name), quantity (number), and notes (short description). " +
-                    "Respond in a pure JSON array format. Do not include Markdown or explanation.";
+                    "Do not include non-food or non-drink items. Respond in pure JSON array format. No Markdown or explanation.";
 
             // Build request payload
             String requestBodyJson = objectMapper.writeValueAsString(Map.of(

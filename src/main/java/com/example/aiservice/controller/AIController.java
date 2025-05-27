@@ -31,10 +31,11 @@ public class AIController {
     })
     @PostMapping("/recommend")
     public Map<String, Object> recommend(@RequestBody Map<String, String> input) {
-        String prompt = input.get("text");
+        String prompt = input.get("prompt");
+        String username = input.get("username");
         if (prompt == null || prompt.trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Prompt is required");
         }
-        return aiService.getRecommendations(prompt);
+        return aiService.getRecommendations(prompt, username);
     }
 }
