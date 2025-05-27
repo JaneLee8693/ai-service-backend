@@ -2,6 +2,7 @@ package com.example.aiservice.kafka;
 
 import com.example.aiservice.model.RecommendationItem;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +24,24 @@ public class KafkaConsumerService {
     public void consume(ConsumerRecord<String, String> record) {
         try {
             String json = record.value();
+            JsonNode root = objectMapper.readTree(json);
 
-            List<RecommendationItem> items = objectMapper.readValue(
-                    json, new TypeReference<>() {}
+            String prompt = root.path("prompt").asText();
+            String username = root.path("username").asText();
+
+            JsonNode itemsNode = root.path("items");
+
+            List<RecommendationItem> items = objectMapper.convertValue(
+                    itemsNode, new TypeReference<>() {}
             );
 
             for (RecommendationItem item : items) {
+                item.setPrompt(prompt);
+                item.setUsername(username);
                 mongoTemplate.save(item);
             }
 
-            System.out.println("✅ Saved to MongoDB: " + items.size() + " items");
+            System.out.println("✅ Saved to MongoDB: " + items.size() + " items with prompt=" + prompt + ", user=" + username);
 
         } catch (Exception e) {
             System.err.println("❌ MongoDB Save Failed: " + e.getMessage());

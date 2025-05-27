@@ -14,19 +14,19 @@ public class OrderQueryService {
     @Autowired
     private RecommendationItemRepository repository;
 
-    public List<RecommendationItem> getAllOrders() {
-        return repository.findAll();
+    public List<RecommendationItem> getAllOrders(String username) {
+        return repository.findAllByUsername(username);
     }
 
-    public Map<String, List<RecommendationItem>> getOrdersGroupedByPrompt() {
-        List<RecommendationItem> all = repository.findAll();
-        return all.stream()
+    public Map<String, List<RecommendationItem>> getGroupedByPrompt(String username) {
+        List<RecommendationItem> list = repository.findAllByUsername(username);
+        return list.stream()
                 .filter(item -> item.getPrompt() != null)
                 .collect(Collectors.groupingBy(RecommendationItem::getPrompt));
     }
 
-    public void deleteByPrompt(String prompt) {
-        repository.deleteAllByPrompt(prompt);
+    public void deleteByPrompt(String username, String prompt) {
+        repository.deleteAllByUsernameAndPrompt(username, prompt);
     }
 
     public void deleteById(String id) {

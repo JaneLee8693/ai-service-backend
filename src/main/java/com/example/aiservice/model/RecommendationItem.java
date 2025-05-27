@@ -18,13 +18,17 @@ public class RecommendationItem {
     @NotBlank(message = "Prompt is required")
     private String prompt;
 
+    @NotBlank(message = "Username is required")
+    private String username;
+
     public RecommendationItem() {}
 
-    public RecommendationItem(String item, int quantity, String notes, String prompt) {
+    public RecommendationItem(String item, int quantity, String notes, String prompt, String username) {
         this.item = item;
         this.quantity = quantity;
         this.notes = notes;
         this.prompt = prompt;
+        this.username = username;
     }
 
     // Getter / Setter
@@ -42,4 +46,7 @@ public class RecommendationItem {
 
     public String getPrompt() { return prompt; }
     public void setPrompt(String prompt) { this.prompt = prompt; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 }
