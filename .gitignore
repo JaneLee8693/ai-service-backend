@@ -12,3 +12,4 @@ target/
 .ai-kafka-env/
 docker-compose*.yml
 prometheus.yml
+src/main/resources/application.yml
