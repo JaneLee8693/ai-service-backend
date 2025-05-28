@@ -1,0 +1,12 @@
+target/*.original
+target/generated-sources/
+target/test-classes/
+target/surefire*
+src/
+*.iml
+*.md
+*.log
+.git
+.idea
+.DS_Store
+application.yml

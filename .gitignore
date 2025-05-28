@@ -3,7 +3,8 @@
 *.iml
 
 # Build output
-target/
+target/*
+!target/ai-service-1.0.jar
 
 # macOS
 .DS_Store
@@ -12,4 +13,6 @@ target/
 .ai-kafka-env/
 docker-compose*.yml
 prometheus.yml
+
+# env
 src/main/resources/application.yml
