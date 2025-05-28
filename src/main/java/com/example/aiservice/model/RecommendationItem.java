@@ -3,6 +3,10 @@ package com.example.aiservice.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
+
+import java.util.Date;
 
 @Document(collection = "recommendation_items")
 public class RecommendationItem {
@@ -23,6 +27,10 @@ public class RecommendationItem {
 
     @NotBlank(message = "UUID is required")
     private String uuid;
+
+    @CreatedDate
+    @Indexed(name = "createdAtIndex", expireAfterSeconds = 86400)
+    private Date createdAt = new Date(); // Automatically set when item is created
 
     public RecommendationItem() {}
 

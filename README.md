@@ -2,19 +2,20 @@
 
 # ☕ AI Order Recommendation Service
 
-This is a Spring Boot side project that turns **natural language input into structured order recommendations**, powered by OpenAI and Kafka.
+This is a cloud-native Java Spring Boot project that turns **natural language input into structured order recommendations**, powered by OpenAI, Kafka, and MongoDB.
 
 ---
 
 ## 🚀 Features
 
-- 🧠 Input free-form sentence, receive smart product recommendations
-- 💬 Uses OpenAI API (gpt-3.5-turbo) to analyze user intent
+- 🧠 Input free-form sentence, receive smart food & drink recommendations
+- 💬 Uses OpenAI API (gpt-3.5-turbo) to analyze user inputs
+- 🔒 Session-based data isolation using client-generated UUIDs
 - 📦 Sends AI response into Kafka topic `recommendations`
 - 🔄 Kafka UI for visualization
-- 🧾 MongoDB: persist order items from Kafka
-- 📊 Prometheus + Grafana monitoring
-- 🐳 Docker Compose setup for Kafka, Zookeeper, Kafka UI, MongoDB
+- 🧾 MongoDB: stores orders with TTL (auto-delete after 24h)
+- 📊 Prometheus + Grafana observability
+- 🐳 Docker Compose for Kafka stack (Kafka, Zookeeper, Kafka UI)
 
 ---
 
@@ -28,26 +29,26 @@ This is a Spring Boot side project that turns **natural language input into stru
 | Database         | MongoDB, Spring Data MongoDB     |
 | Monitoring       | Prometheus, Grafana              |
 | DevOps           | Docker Compose                   |
-| Frontend         | Angular                          |
+| Frontend         | Angular, Typescript, Tailwind    |
 
 ---
 
 ## 📚 Learning Purpose
 This project is designed for learning and building skills in:
 
-- Spring Boot microservices
+- Spring Boot microservices & REST APIs
 
 - Kafka event-driven architecture
 
 - Cloud-native deployments
 
-- AI x backend integration
+- OpenAI integration into real services
 
-- Real-world observability
+- Scalable observability (Prometheus, Grafana)
 
 ---
 
-## 🔧 How to Run (Locally)
+## 🔧 How to Run
 
 ### 1. Start Kafka & UI
 
@@ -70,17 +71,13 @@ POST http://localhost:8081/api/ai/recommend
 Content-Type: application/json
 
 {
-  "text": "I'm in a bad mood today and want to eat something sweet"
+  "prompt": "I want something warm and spicy",
+  "username": "Jane",
+  "uuid": "some-uuid"
 }
 ```
 
-The response will be saved to Kafka topic recommendations, and displayed in Kafka UI:
-
-```bash
-http://localhost:8080
-```
-
-👩‍💻 Author
+### 👩‍💻 Author
 Built with ❤️ by JaneLee8693
 
 
