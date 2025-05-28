@@ -33,9 +33,10 @@ public class AIController {
     public Map<String, Object> recommend(@RequestBody Map<String, String> input) {
         String prompt = input.get("prompt");
         String username = input.get("username");
+        String uuid = input.get("uuid");
         if (prompt == null || prompt.trim().isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Prompt is required");
         }
-        return aiService.getRecommendations(prompt, username);
+        return aiService.getRecommendations(prompt, username, uuid);
     }
 }

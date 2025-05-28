@@ -23,13 +23,14 @@ public class AIService {
     @Autowired
     private KafkaProducerService kafkaProducerService;
 
-    public Map<String, Object> getRecommendations(String prompt, String username) {
+    public Map<String, Object> getRecommendations(String prompt, String username, String uuid) {
         try {
             // Craft the prompt to send to OpenAI
             String fullPrompt = "The user provided the following input: \"" + prompt + "\". " +
                     "Based only on food and drink items, recommend up to three order items. " +
                     "Each item should include: item (product name), quantity (number), and notes (short description). " +
-                    "Do not include non-food or non-drink items. Respond in pure JSON array format. No Markdown or explanation.";
+                    "Do not include non-food or non-drink items. Do not be too vague or too general (i.e. fancy dinner, hot tea)." +
+                    "Respond in pure JSON array format. No Markdown or explanation.";
 
             // Build request payload
             String requestBodyJson = objectMapper.writeValueAsString(Map.of(
@@ -72,6 +73,7 @@ public class AIService {
                 ObjectNode wrapper = objectMapper.createObjectNode();
                 wrapper.put("prompt", prompt);
                 wrapper.put("username", username);
+                wrapper.put("uuid", uuid);
                 wrapper.set("items", recommendations);
 
                 // Send to Kafka

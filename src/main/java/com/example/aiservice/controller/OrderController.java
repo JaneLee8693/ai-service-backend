@@ -25,20 +25,18 @@ public class OrderController {
     )
     @ApiResponse(responseCode = "200", description = "Successfully fetched saved items")
     @GetMapping
-    public List<RecommendationItem> getOrders(@RequestParam(required = false) String username) {
-        return username != null ? orderQueryService.getOrdersByUsername(username)
-                : orderQueryService.getAllOrders();
+    public List<RecommendationItem> getOrders(@RequestParam String uuid) {
+        return orderQueryService.getOrdersByUuid(uuid);
     }
 
     @GetMapping("/grouped")
-    public Map<String, List<RecommendationItem>> getGrouped(@RequestParam(required = false) String username) {
-        return username != null ? orderQueryService.getGroupedByPromptAndUser(username)
-                : Collections.emptyMap();
+    public Map<String, List<RecommendationItem>> getGrouped(@RequestParam String uuid) {
+        return orderQueryService.getGroupedByPromptAndUuid(uuid);
     }
 
     @DeleteMapping("/grouped/{prompt}")
-    public void deleteGroup(@PathVariable String prompt, @RequestParam String username) {
-        orderQueryService.deleteByPrompt(username, prompt);
+    public void deleteGroup(@PathVariable String prompt, @RequestParam String uuid) {
+        orderQueryService.deleteByPrompt(uuid, prompt);
     }
 
     @DeleteMapping("/{id}")

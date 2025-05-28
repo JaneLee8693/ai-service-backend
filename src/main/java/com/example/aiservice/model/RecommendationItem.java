@@ -21,14 +21,18 @@ public class RecommendationItem {
     @NotBlank(message = "Username is required")
     private String username;
 
+    @NotBlank(message = "UUID is required")
+    private String uuid;
+
     public RecommendationItem() {}
 
-    public RecommendationItem(String item, int quantity, String notes, String prompt, String username) {
+    public RecommendationItem(String item, int quantity, String notes, String prompt, String username, String uuid) {
         this.item = item;
         this.quantity = quantity;
         this.notes = notes;
         this.prompt = prompt;
         this.username = username;
+        this.uuid = uuid;
     }
 
     // Getter / Setter
@@ -49,4 +53,7 @@ public class RecommendationItem {
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
+
+    public String getUuid() { return uuid; }
+    public void setUuid(String uuid) { this.uuid = uuid; }
 }

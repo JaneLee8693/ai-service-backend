@@ -28,6 +28,7 @@ public class KafkaConsumerService {
 
             String prompt = root.path("prompt").asText();
             String username = root.path("username").asText();
+            String uuid = root.path("uuid").asText();
 
             JsonNode itemsNode = root.path("items");
 
@@ -38,10 +39,12 @@ public class KafkaConsumerService {
             for (RecommendationItem item : items) {
                 item.setPrompt(prompt);
                 item.setUsername(username);
+                item.setUuid(uuid);
                 mongoTemplate.save(item);
             }
 
-            System.out.println("✅ Saved to MongoDB: " + items.size() + " items with prompt=" + prompt + ", user=" + username);
+            System.out.println("✅ Saved to MongoDB: " + items.size() +
+                    " items with prompt=" + prompt + ", user=" + username + ", uuid=" + uuid);
 
         } catch (Exception e) {
             System.err.println("❌ MongoDB Save Failed: " + e.getMessage());

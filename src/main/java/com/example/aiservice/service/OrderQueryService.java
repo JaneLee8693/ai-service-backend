@@ -18,21 +18,21 @@ public class OrderQueryService {
         return repository.findAll();
     }
 
-    public List<RecommendationItem> getOrdersByUsername(String username) {
-        return repository.findAllByUsername(username);
+    public void deleteById(String id) {
+        repository.deleteById(id);
     }
 
-    public Map<String, List<RecommendationItem>> getGroupedByPromptAndUser(String username) {
-        return repository.findAllByUsername(username).stream()
+    public List<RecommendationItem> getOrdersByUuid(String uuid) {
+        return repository.findAllByUuid(uuid);
+    }
+
+    public Map<String, List<RecommendationItem>> getGroupedByPromptAndUuid(String uuid) {
+        return repository.findAllByUuid(uuid).stream()
                 .filter(item -> item.getPrompt() != null)
                 .collect(Collectors.groupingBy(RecommendationItem::getPrompt));
     }
 
-    public void deleteByPrompt(String username, String prompt) {
-        repository.deleteAllByUsernameAndPrompt(username, prompt);
-    }
-
-    public void deleteById(String id) {
-        repository.deleteById(id);
+    public void deleteByPrompt(String uuid, String prompt) {
+        repository.deleteAllByUuidAndPrompt(uuid, prompt);
     }
 }
